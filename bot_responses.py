@@ -9,8 +9,9 @@ def get_all_labels(trello_card):
         labels += label.name + ", "
     return labels[:-2]
 
+
 # Comments the blacklist search result for search queries that are requested by the users
-def blacklist_search_result_for_query(UserName, blacklist):
+def blacklist_search_result_for_query(user_name, blacklist):
     response_text = ""
     usernames_for_positive_result = ""  # stores the usernames which gave positive search result in string
     positive_result_usernames_list = []  # stores the usernames which gave positive search result in list
@@ -21,12 +22,12 @@ def blacklist_search_result_for_query(UserName, blacklist):
     # If that username gave positive search result
     i = 0
     if len(blacklist[i]) > 0:
-        usernames_for_positive_result += UserName + ", "
-        positive_result_usernames_list.append(UserName)
+        usernames_for_positive_result += user_name + ", "
+        positive_result_usernames_list.append(user_name)
         positive_results.append(blacklist[i])
         # If that username gave negative search result
     else:
-        usernames_for_negative_result += UserName + ", "
+        usernames_for_negative_result += user_name + ", "
         negative_results_usernames_list.append(blacklist[i])
     # If there are users that had positive search result
     if len(positive_result_usernames_list) > 0:

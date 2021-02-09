@@ -5,15 +5,17 @@ import trello
 import CONFIG
 import bot_responses
 
+
 # Checks the blacklist for passed in user name
-def check_user_in_blacklist(UserName):
+def check_user_in_blacklist(user_name):
     # The escaping is removed so both fancy pants and markdown editor have same text
-#    output = UserName.replace("\\", "")
+    #    output = UserName.replace("\\", "")
 
     blacklist_result = list()
-    blacklist_result.append(search_in_blacklist(UserName.strip()))
+    blacklist_result.append(search_in_blacklist(user_name.strip()))
 
-    return bot_responses.blacklist_search_result_for_query(UserName, blacklist_result)
+    return bot_responses.blacklist_search_result_for_query(user_name, blacklist_result)
+
 
 # Removes the archived cards from list
 def delete_archived_cards_and_check_desc(search_result, search_query):
@@ -29,6 +31,7 @@ def delete_archived_cards_and_check_desc(search_result, search_query):
         if search_query.lower() not in card.description.lower().replace("\\", ""):
             search_result.remove(card)
     return search_result
+
 
 # Searches in trello board using trello api and return the search result in a list\
 # The list is empty if there are no search results

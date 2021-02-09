@@ -1,8 +1,9 @@
 import os
 import sys
-from dotenv import load_dotenv
-from discord.ext import commands
+
 import discord
+from discord.ext import commands
+from dotenv import load_dotenv
 
 import trello_blacklist
 
@@ -26,12 +27,6 @@ async def on_error(event, *args, **kwargs):
 
 
 @bot.event
-async def on_command_error(ctx, error):
-    if isinstance(error, commands.errors.MissingRequiredArgument):
-        await ctx.send('You must include a user name to check when calling the blacklist bot.')
-
-
-@bot.event
 async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
     await bot.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name="mmmmmmmmmmmmiss ;)"))
@@ -42,12 +37,19 @@ async def on_ready():
     print(f'{guild.name} (id: {guild.id})\n')
 
 
-@bot.command(name='blacklist', help='Checks the blacklist for a named user.')
-async def check_blacklist(ctx, *args):
-    UserName = " ".join(args[:])
+@bot.event
+async def on_message(message):
+    if message.channel.name == "blacklist_check":
+        if message.author.bot:
+            return
+        if len(message.content) == 0:
+            return
+        else:
+            user_name = message.content
+            response = trello_blacklist.check_user_in_blacklist(user_name)
+            await message.channel.send(response)
 
-    response = trello_blacklist.check_user_in_blacklist(UserName)
-    await ctx.send(response)
+    await bot.process_commands(message)
 
 
 bot.run(TOKEN)
